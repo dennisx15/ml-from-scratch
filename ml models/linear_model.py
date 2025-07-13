@@ -32,7 +32,7 @@ def sum_of_predict_derivatives_w_respect_to_intercept(x, y):
 
 
 while sum_of_squared_residuals(x, y) > 1e-6:
-    slope -= sum_of_predict_derivatives_w_respect_to_slope(x,y) * learning_rate
+    slope -= sum_of_predict_derivatives_w_respect_to_slope(x, y) * learning_rate
     intercept -= sum_of_predict_derivatives_w_respect_to_intercept(x, y) * learning_rate
 
 
