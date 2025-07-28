@@ -97,3 +97,5 @@ def train(epochs, x, y):
             print(f"Epoch {epoch} | Loss: {sum_of_squared_residuals(x, y):.4f}")
 
 
+train(200000, x, y)
+
