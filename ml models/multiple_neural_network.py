@@ -32,7 +32,7 @@ Y = np.array([targets[int(x)] for x in train.values[:, 4:5]])
 
 num_inputs = len(X[0])
 num_outputs = len(Y[0])
-hidden_layer_neurons = 5
+hidden_layer_neurons = 10
 
 
 w1 = 2 * np.random.random((num_inputs, hidden_layer_neurons)) - 1

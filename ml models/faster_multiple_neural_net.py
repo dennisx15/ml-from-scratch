@@ -163,7 +163,7 @@ def train(epochs, x, y, w_1, w_2, b_1, b_2):
     return w_1, w_2, b_1, b_2
 
 
-w1, w2, b1, b2 = train(10000, X, Y, w1, w2, b1, b2)
+w1, w2, b1, b2 = train(1000, X, Y, w1, w2, b1, b2)
 test_x = test.values[:, :4]
 test_y = np.array([targets[int(x)] for x in test.values[:, 4:5]])
 
