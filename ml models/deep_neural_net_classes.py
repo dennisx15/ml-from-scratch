@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def relu(number):
     return np.maximum(0, number)
 
@@ -59,8 +58,7 @@ def batch_data(X, y, batch_size, shuffle=False, drop_last=False):
 def softmax(logits):
     logits_shifted = logits - np.max(logits, axis=1, keepdims=True)
     exp_scores = np.exp(logits_shifted)
-    softmax = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
-    return softmax
+    return (exp_scores / np.sum(exp_scores, axis=1, keepdims=True))
 
 
 class HiddenLayer:
@@ -147,5 +145,115 @@ class OutputLayer:
         b1_grads = np.sum(delta_hidden, axis=0, keepdims=True)  # (1, hidden_units)
 
         return w1_grads, w2_grads, b1_grads, b2_grads, delta_hidden
+
+
+class NeuralNetwork:
+    def __init__(self, hidden_layers, output_layer):
+        self.hidden_layers = hidden_layers
+        self.output_layer = output_layer
+
+
+    def predict(self, x):
+        out = x
+        for hidden_layer in self.hidden_layers:
+            out = hidden_layer.predict(out)
+        return self.output_layer.predict(out)
+
+    def accuracy(self, x, y):
+        preds = self.predict(x)  # shape: (num_samples, num_classes)
+        pred_classes = np.argmax(preds, axis=1)
+        true_classes = np.argmax(y, axis=1)
+        return np.mean(pred_classes == true_classes)
+
+    def cross_entropy(self, y_true, y_pred):
+        # Clip to prevent log(0)
+        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        # Mean over samples
+        return -np.mean(np.sum(y_true * np.log(y_pred), axis=1))
+
+    def train(self, x, y, epochs, lr, batch_size, shuffle=True, drop_last=False, seed=42):
+        if seed is not None:
+            np.random.seed(seed)
+
+        for epoch in range(epochs):
+            for X_batch, y_batch in batch_data(x, y, batch_size=batch_size, shuffle=shuffle, drop_last=drop_last):
+
+                batch_size = X_batch.shape[0]
+                out = X_batch
+                hidden_outs = [X_batch]
+                for hidden_layer in self.hidden_layers:
+                    out = hidden_layer.predict(out)
+                    hidden_outs.append(out)
+
+                probs = self.output_layer.predict(out)
+
+                w1_grads, w2_grads, b1_grads, b2_grads, delta_hidden = \
+                    self.output_layer.back_propagate(hidden_outs[-1], y_batch)
+
+                # Update output layer weights
+
+
+                next_delta = delta_hidden
+                next_weights = self.output_layer.input_weights
+                grads = []
+                for i in reversed(range(len(self.hidden_layers))):
+
+                    h = self.hidden_layers[i]
+                    prev_out = hidden_outs[i]
+                    w_grads, b_grads, delta_hidden = h.back_propagate(prev_out, next_delta, next_weights)
+
+
+                    input_weight_update = lr * w_grads / batch_size
+                    input_bias_update = lr * b_grads / batch_size
+                    grads.append([input_weight_update, input_bias_update])
+
+                    next_delta = delta_hidden
+                    next_weights = h.input_weights
+
+                grads.reverse()
+                for i in range(len(self.hidden_layers)):
+                    self.hidden_layers[i].input_weights -= grads[i][0]
+                    self.hidden_layers[i].input_biases -= grads[i][1]
+
+                self.output_layer.input_weights -= lr * w1_grads / batch_size
+                self.output_layer.input_biases -= lr * b1_grads / batch_size
+                self.output_layer.output_weights -= lr * w2_grads / batch_size
+                self.output_layer.output_biases -= lr * b2_grads / batch_size
+
+            if epoch % 5 == 0:
+                preds = self.predict(np.vstack(x))
+                acc = self.accuracy(np.vstack(x), np.vstack(y))
+                loss = self.cross_entropy(np.vstack(y), preds)
+                print(f"Epoch {epoch}, Loss: {loss:.4f}, Accuracy: {acc:.2%}")
+
+
+    # --- Saving ---
+    def save_model(self, filename="model_weights.npz"):
+        params = {}
+        # Save hidden layers
+        for i, layer in enumerate(self.hidden_layers):
+            params[f"h{i}_weights"] = layer.input_weights
+            params[f"h{i}_biases"] = layer.input_biases
+        # Save output layer
+        params["out_input_weights"] = self.output_layer.input_weights
+        params["out_input_biases"] = self.output_layer.input_biases
+        params["out_output_weights"] = self.output_layer.output_weights
+        params["out_output_biases"] = self.output_layer.output_biases
+
+        np.savez(filename, **params)
+        print(f"Model saved to {filename}")
+
+    # --- Loading ---
+    def load_model(self,  filename="model_weights.npz"):
+        params = np.load(filename)
+        for i, layer in enumerate(self.hidden_layers):
+            layer.input_weights = params[f"h{i}_weights"]
+            layer.input_biases = params[f"h{i}_biases"]
+        self.output_layer.input_weights = params["out_input_weights"]
+        self.output_layer.input_biases = params["out_input_biases"]
+        self.output_layer.output_weights = params["out_output_weights"]
+        self.output_layer.output_biases = params["out_output_biases"]
+        print(f"Model loaded from {filename}")
+
 
 
