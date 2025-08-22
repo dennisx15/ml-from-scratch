@@ -1,5 +1,5 @@
-import neural_networks
-from neural_networks import *
+from educational_models import neural_networks
+from educational_models.neural_networks import *
 import matplotlib.pyplot as plt
 
 

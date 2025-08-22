@@ -1,9 +1,9 @@
-import deep_neural_net_classes as dnnc
+from practical_models import deep_neural_net_classes as dnnc
 import numpy as np
 from PIL import Image
 
 # Load the image
-img = Image.open("C:\\Users\\denni\\OneDrive\\Desktop\\onee.png").convert("L")  # Convert to grayscale
+img = Image.open("C:\\Users\\denni\\OneDrive\\Desktop\\one.png").convert("L")  # Convert to grayscale
 
 # Resize to 28x28
 img = img.resize((28, 28))
@@ -11,10 +11,10 @@ img = img.resize((28, 28))
 # Convert to numpy array
 img_array = np.array(img, dtype=np.float32)
 
-# Normalize pixel values to 0-1
+
 img_array /= 255.0
 
-# Flatten to 1D (if your network expects a vector)
+
 img_vector = img_array.flatten()
 
 img_vector = img_vector.reshape(1, -1)

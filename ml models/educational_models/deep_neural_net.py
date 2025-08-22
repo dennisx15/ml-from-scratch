@@ -1,4 +1,4 @@
-import deep_neural_net_classes as dnnc
+from practical_models import deep_neural_net_classes as dnnc
 import pandas as pd
 import numpy as np
 import math
@@ -6,7 +6,7 @@ import math
 
 np.random.seed(42)
 
-data = pd.read_csv("../datasets/Iris.csv")
+data = pd.read_csv("../../datasets/Iris.csv")
 df_norm = data[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 
 

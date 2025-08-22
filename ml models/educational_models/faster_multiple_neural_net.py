@@ -5,7 +5,7 @@ import math
 
 np.random.seed(42)
 
-data = pd.read_csv("../datasets/Iris.csv")
+data = pd.read_csv("../../datasets/Iris.csv")
 df_norm = data[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 
 

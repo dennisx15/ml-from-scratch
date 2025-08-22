@@ -1,4 +1,4 @@
-import deep_neural_net_classes as dnnc
+from practical_models import deep_neural_net_classes as dnnc
 from datasets.DataLoaders import MnistDigits
 import numpy as np
 
@@ -39,7 +39,6 @@ def accuracy(x_batches, y_batches):
 def argmax_one_hot(prediction):
     max_val = max(prediction[0])
     return [1.0 if i == max_val else 0.0 for i in prediction[0]]
-
 
 input_path = '../input'
 training_images_filepath = 'C:\\Users\\denni\\PycharmProjects\\ml-from-scratch\\datasets\\Mnist\\train-images-idx3-ubyte\\train-images-idx3-ubyte'

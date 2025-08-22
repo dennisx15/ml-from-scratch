@@ -1,10 +1,9 @@
-import deep_neural_net_classes as dnnc
+from practical_models import deep_neural_net_classes as dnnc
 from datasets.DataLoaders import MnistDigits
+from graphing import graphing_framework
 import numpy as np
 
-
 np.random.seed(42)
-
 corrects = 0
 num_inputs = 784
 num_outputs = 10
@@ -13,6 +12,8 @@ lr = 0.04
 epochs = 5
 batch_size = 20
 
+
+#change these paths accordingly
 input_path = '../input'
 training_images_filepath = 'C:\\Users\\denni\\PycharmProjects\\ml-from-scratch\\datasets\\Mnist\\train-images-idx3-ubyte\\train-images-idx3-ubyte'
 training_labels_filepath = 'C:\\Users\\denni\\PycharmProjects\\ml-from-scratch\\datasets\\Mnist\\train-labels-idx1-ubyte\\train-labels-idx1-ubyte'
@@ -56,10 +57,14 @@ model = dnnc.NeuralNetwork(
     output_layer=output_layer)
 
 model.train(x_train, y_train, epochs=epochs, lr=lr, batch_size=batch_size, shuffle=True, drop_last=False, seed=42)
-model.save_model( "C:\\Users\\denni\\OneDrive\\Desktop\\model_weightss.npz")
+model.save_model( "C:\\Users\\denni\\OneDrive\\Desktop\\model_weights.npz")
 
 
 test_x = x_test
 test_y = y_test
 print(model.accuracy(test_x, test_y))
+
+y_pred = model.predict(test_x)
+y_true = test_y
+graphing_framework.plot_confusion_matrix(num_classes=10, y_true=y_true, y_pred=y_pred)
 
