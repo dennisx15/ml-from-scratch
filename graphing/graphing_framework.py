@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def plot_accuracy(accuracies):
     fig = go.Figure()
@@ -45,3 +45,10 @@ def plot_confusion_matrix(num_classes, y_true, y_pred):
     )
 
     fig.show()
+
+def display_image(image):
+    plt.imshow(image, cmap='gray')  # cmap='gray' for grayscale
+    plt.colorbar()  # optional, shows scale
+    plt.axis('off')  # hide axes
+    plt.show()
+

@@ -9,7 +9,7 @@ num_inputs = 784
 num_outputs = 10
 num_classes = 10
 lr = 0.04
-epochs = 5
+epochs = 30
 batch_size = 20
 
 

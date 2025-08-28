@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 # Load the image
-img = Image.open("C:\\Users\\denni\\OneDrive\\Desktop\\one.png").convert("L")  # Convert to grayscale
+img = Image.open("C:\\Users\\denni\\OneDrive\\Desktop\\three.png").convert("L")  # Convert to grayscale
 
 # Resize to 28x28
 img = img.resize((28, 28))
