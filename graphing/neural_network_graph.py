@@ -22,6 +22,3 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-
-# If this code does not work, right click on ml_models, hover over mark directory as, and choose Sources Root
-
